@@ -1,11 +1,14 @@
 ﻿using Assignment.Business.Abstractions.Mongo;
 using Assignment.Shared.Constants;
 using Assignment.Shared.Requests.Product;
+using Assignment.Shared.Responses;
+using Assignment.Shared.Responses.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Diagnostics.Contracts;
+using System.Net;
 
 namespace Assignment.Mongo.API.Controllers
 {
@@ -18,6 +21,8 @@ namespace Assignment.Mongo.API.Controllers
         {
         }
         [HttpGet]
+        [ProducesResponseType(typeof(ActionResponse<IEnumerable<ProductResponse>>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FailActionResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Get()
         {
             var response = await _business.GetAll();
@@ -31,12 +36,16 @@ namespace Assignment.Mongo.API.Controllers
         //    return CreateOkForResponse(response);
         //}
         [HttpPost]
+        [ProducesResponseType(typeof(ActionResponse<ProductResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FailActionResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(ProductAddRequest request)
         {
             var product = await _business.Create(request);
             return CreateOkForResponse(product);
         }
         [HttpPut]
+        [ProducesResponseType(typeof(ActionResponse<ProductResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FailActionResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Update(ProductUpdateRequest request)
         {
             var product = await _business.Update(request);
@@ -50,6 +59,8 @@ namespace Assignment.Mongo.API.Controllers
         //    return CreateOkForResponse(product);
         //}
         [HttpDelete]
+        [ProducesResponseType(typeof(ActionResponse), (int)HttpStatusCode.NoContent)]
+        [ProducesResponseType(typeof(FailActionResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(string id)
         {
             await _business.Delete(id);

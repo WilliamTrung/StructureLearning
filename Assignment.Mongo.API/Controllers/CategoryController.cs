@@ -1,8 +1,11 @@
 ﻿using Assignment.Business.Abstractions.Mongo;
 using Assignment.Shared.Constants;
 using Assignment.Shared.Requests.Category;
+using Assignment.Shared.Responses.Category;
+using Assignment.Shared.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Assignment.Mongo.API.Controllers
 {
@@ -15,6 +18,8 @@ namespace Assignment.Mongo.API.Controllers
         {
         }
         [HttpGet]
+        [ProducesResponseType(typeof(ActionResponse<IEnumerable<CategoryResponse>>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FailActionResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetAll()
         {
             var res = await _business.GetAll();
@@ -28,18 +33,24 @@ namespace Assignment.Mongo.API.Controllers
         //    return CreateOkForResponse(categories);
         //}
         [HttpPost]
+        [ProducesResponseType(typeof(ActionResponse<CategoryResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FailActionResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(CategoryAddRequest request)
         {
             var res = await _business.Create(request);
             return CreateOkForResponse(res);
         }
         [HttpPut]
+        [ProducesResponseType(typeof(ActionResponse<CategoryResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FailActionResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Update(CategoryUpdateRequest request)
         {
             var res = await _business.Update(request);
             return CreateOkForResponse(res);
         }
         [HttpDelete]
+        [ProducesResponseType(typeof(ActionResponse), (int)HttpStatusCode.NoContent)]
+        [ProducesResponseType(typeof(FailActionResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(string categoryId)
         {
             await _business.Delete(categoryId);
