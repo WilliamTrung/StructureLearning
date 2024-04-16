@@ -1,0 +1,15 @@
+﻿using Assignment.Shared.Requests.Auth;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Assignment.Business.Abstractions
+{
+    public interface IAuthBusiness : IBusiness
+    {
+        Task<string> Login(LoginRequest request);
+
+    }
+}
